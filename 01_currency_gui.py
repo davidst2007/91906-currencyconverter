@@ -29,6 +29,7 @@ class Converter:
         self.button_frame.grid(row=3)
 
         # this is all stuff for convert_frame
+
         # input_frame and output_frame are within convert_frame and will have their own dropdowns etc
         self.input_frame = Frame(self.convert_frame)
         self.input_frame.grid(column=0, row=0, padx=10)
@@ -48,6 +49,13 @@ class Converter:
         self.input_combo_box = ttk.Combobox(self.input_frame, state="readonly", values=["test", "test2"])
         self.input_combo_box.grid(row=1)
 
+        self.input_entry = Entry(self.input_frame,
+                                font=("Arial", "12"),
+                                width=15
+                                )
+
+        self.input_entry.grid(row=2, padx=10, pady=10)
+
         # output_frame contents
         self.output_label = Label(self.output_frame,
                                   text="Currency to convert to",
@@ -57,6 +65,13 @@ class Converter:
 
         self.output_combo_box = ttk.Combobox(self.output_frame, state="readonly", values=["test", "test2"])
         self.output_combo_box.grid(row=1)
+
+        self.output_entry = Entry(self.output_frame,
+                                font=("Arial", "12"),
+                                width=15
+                                )
+
+        self.output_entry.grid(row=2, padx=10, pady=10)
         # convert_frame stuff ends here
 
         # button list (button text | bg colour | command | row | column)

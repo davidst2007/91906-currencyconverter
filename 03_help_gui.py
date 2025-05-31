@@ -1,15 +1,17 @@
 from tkinter import *
 from functools import partial  # To prevent unwanted windows
 
+
 class Converter:
     def __init__(self):
 
-        self.temp_frame = Frame(padx=10, pady=10)
-        self.temp_frame.grid()
+        self.base_frame = Frame(padx=10, pady=10)
+        self.base_frame.grid()
 
-        self.to_help_button = Button(self.temp_frame,
+        self.to_help_button = Button(self.base_frame,
                                      text="Help / Info",
-                                     bg="#CC6600",
+                                     bg="#A32CC4",
+                                     # fg determines the text colour
                                      fg="#FFFFFF",
                                      font=("Arial", "14", "bold"), width=12,
                                      command=self.to_help)
@@ -21,6 +23,7 @@ class Converter:
         (so that users can't create multiple help boxes).
         """
         DisplayHelp(self)
+
 
 class DisplayHelp:
     def __init__(self, partner):
@@ -43,12 +46,14 @@ class DisplayHelp:
                                         font=("Arial", "14", "bold"))
         self.help_heading_label.grid(row=0)
 
-        help_text = "To use the program, simply enter the temperature you wish to convert and then choose to convert " \
-                    "to either degrees Celsius (centigrade) or Fahrenheit.. \n \n " \
-                    "Note that -273 degrees C (-459 F) is " \
-                    "absolute zero (the coldest possible temperature). If you try to convert a temperature that is " \
-                    "less than -273 degrees C, you will get an error message. \n\n To see your calculation history " \
-                    "and export it to a text file, please click the 'History / Export' button."
+        help_text = "To use the currency converter, set the desired currencies to convert to and from " \
+                    "via the dropdowns.\n\n" \
+                    "Then type the amount of currency that you want to convert on the left box.\n\n" \
+                    "Press the convert button and the equivalent amount in the other currency " \
+                    "will appear in the other box.\n\n" \
+                    "You can also press the swap button to swap the currencies, " \
+                    "and the settings button to change settings.\n\n" \
+                    "You can press the help button to access this again."
 
         self.help_text_label = Label(self.help_frame,
                                      text=help_text, wraplength=350,
@@ -73,14 +78,9 @@ class DisplayHelp:
         partner.to_help_button.config(state=NORMAL)
         self.help_box.destroy()
 
-    if __name__ == "__main__":
-        root = Tk()
-        root.title("Temperature Converter")
-        Converter()
-        root.mainloop()
 
-
-
-
-
-
+if __name__ == "__main__":
+    root = Tk()
+    root.title("Currency Converter")
+    Converter()
+    root.mainloop()
