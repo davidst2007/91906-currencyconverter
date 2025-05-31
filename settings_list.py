@@ -1,3 +1,5 @@
+"""Constant file used as a dictionary for setting parameters."""
+
 # This is a constant. It is a list of all settings, what they do, and what type they are.
 
 # "input_type" refers to the type of input that it will use.
@@ -16,7 +18,7 @@ settings = {
         # The "style" setting dictates how the program will look.
         "input_type": "dropdown",
         "options": ["Default", "Dark"],
-        "name": "Style",
+        "name": "Style (requires restart)",
         "default_value": "Default"
 
     },
@@ -25,7 +27,7 @@ settings = {
         # The "help_button_hide" setting will hide the help box if checked.
         "input_type": "checkbox",
         "options": [True, False],
-        "name": "Hide Help Button",
+        "name": "Hide Help Button (requires restart)",
         "default_value": False
     }
 

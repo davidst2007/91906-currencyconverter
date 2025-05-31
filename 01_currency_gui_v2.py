@@ -1,5 +1,10 @@
 from tkinter import *
 from tkinter import ttk
+from functools import partial  # To prevent unwanted windows
+import convert_round as cr
+import settings_list as s
+import settings_functions as sfunc
+import api_functionality as api
 
 
 class Converter:
@@ -46,7 +51,7 @@ class Converter:
                                  )
         self.input_label.grid(row=0)
 
-        self.input_combo_box = ttk.Combobox(self.input_frame, state="readonly", values=["test", "test2"])
+        self.input_combo_box = ttk.Combobox(self.input_frame, state="readonly", values=list(api.currency_list.values()))
         self.input_combo_box.grid(row=1)
 
         self.input_entry = Entry(self.input_frame,
@@ -63,7 +68,7 @@ class Converter:
                                   )
         self.output_label.grid(row=0)
 
-        self.output_combo_box = ttk.Combobox(self.output_frame, state="readonly", values=["test", "test2"])
+        self.output_combo_box = ttk.Combobox(self.output_frame, state="readonly", values=list(api.currency_list.values()))
         self.output_combo_box.grid(row=1)
 
         self.output_entry = Entry(self.output_frame,
@@ -76,8 +81,8 @@ class Converter:
 
         # button list (button text | bg colour | command | row | column)
         button_details_list = [
-            ["Convert", "#03AC13", "", 0, 0],
-            ["Swap", "#F96815", "", 0, 1],
+            ["Convert", "#03AC13", self.input_checker, 0, 0],
+            ["Swap", "#F96815", self.swap_inputs, 0, 1],
             ["Settings", "#0492C2", "", 1, 0],
             ["Help", "#A32CC4", "", 1, 1]
         ]
@@ -94,8 +99,71 @@ class Converter:
 
             self.button_ref_list.append(self.make_button)
 
+    def convert(self, value):
+        input_currency_ico = api.currency_name_to_ico(self.input_combo_box.get())
+        output_currency_ico = api.currency_name_to_ico(self.output_combo_box.get())
+
+        exchange_rate = api.exchange_rate_get(input_currency_ico, output_currency_ico)
+        answer = cr.convert_round_4dp(value, exchange_rate)
+
+        answer_statement = f"{value} {input_currency_ico} is {answer} in {output_currency_ico}"
+
+        self.error_label.config(text=answer_statement, fg="#960019", font=("Arial", "12", "bold"))
+        self.output_entry.insert(0, answer)
+
+
+    def input_checker(self):
+        has_errors = False
+        error = ""
+
+        # Before we do anything, check that the currency options are not the same.
+        # If they are the same, trying to pass them to the API will result in an error and will mess everything up.
+        if self.input_combo_box.get() == self.output_combo_box.get():
+            error = "You cannot convert to the same currency!"
+            has_errors = True
+
+        # If they're not the same, we continue.
+        else:
+
+            try:
+                value = int(self.input_entry.get())
+                if value > 0:
+                    # Add API stuff here later
+                    self.convert(value)
+                    return
+                else:
+                    error = "Input must be a number greater than 0!"
+                    has_errors = True
+
+            except ValueError:
+                error = "Input must be a number greater than 0!"
+                has_errors = True
+
+        if has_errors:
+            self.error_label.config(text=error, fg="#960019", font=("Arial", "10", "bold"))
+            self.input_entry.config(bg="#F4CCCC")
+            self.input_entry.delete(0, END)
+
+    def swap_inputs(self):
+
+        # getting all the values from all the comboboxes and dropdowns so we can swap them later
+        input_dropdown = self.input_combo_box.get()
+        output_dropdown = self.output_combo_box.get()
+        input_entry = self.input_entry.get()
+        output_entry = self.output_entry.get()
+
+        self.input_combo_box.set(output_dropdown)
+        self.output_combo_box.set(input_dropdown)
+        self.input_entry.insert(0, output_entry)
+        self.output_entry.insert(0, input_entry)
+
+
 
 # main routine
+
+# this makes sure that all the settings are correct and should always be before making the gui
+# otherwise, in the main code, problems will arise when trying to use settings such as style if the settings are wrong
+sfunc.settings_validator(s.settings.items(), (sfunc.settings_read(s.json_name)), s.default_dict, s.json_name)
 root = Tk()
 root.title("Currency Converter")
 Converter()

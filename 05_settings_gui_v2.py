@@ -42,7 +42,7 @@ class DisplaySettings:
         partner.to_settings_button.config(state=DISABLED)
 
         self.settings_box.protocol('WM_DELETE_WINDOW',
-                                   partial(self.close_help, partner))
+                                   partial(self.close_settings, partner))
 
         self.settings_frame = Frame(self.settings_box, width=300,
                                     height=200)
@@ -100,6 +100,7 @@ class DisplaySettings:
                 self.settings_ref_list.append(self.make_settings_input)
                 self.checkbutton_ref_list.append(state)
 
+                # Set the value when we create it
                 if current_value:
                     self.make_settings_input.select()
                 elif not current_value:
@@ -118,7 +119,7 @@ class DisplaySettings:
                                      font=("Arial", "12", "bold"),
                                      text="Dismiss", bg="#CC6600",
                                      fg="#FFFFFF",
-                                     command=partial(self.close_help, partner))
+                                     command=partial(self.close_settings, partner))
         self.dismiss_button.grid(column=0, row=1, padx=10, pady=10, sticky="nsew")
 
         self.save_button = Button(self.button_frame,
@@ -160,7 +161,7 @@ class DisplaySettings:
             current_setting += 1
 
 
-    def close_help(self, partner):
+    def close_settings(self, partner):
         partner.to_settings_button.config(state=NORMAL)
         self.settings_box.destroy()
 

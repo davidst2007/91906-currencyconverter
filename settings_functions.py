@@ -1,17 +1,20 @@
+"""Settings functionality."""
+
 import json
-import settings_list as s
 
 # This file is intended to be imported into other files.
 
 def settings_read(target_json):
+    """Reads settings file and returns as dictionary."""
     try:
         with open(target_json, "r") as j:
             return json.load(j)
     except (json.decoder.JSONDecodeError, FileNotFoundError):
-        print("No JSON file detected.")
+        # print("No JSON file detected.")
         return
 
 def settings_validator(settings_format, settings, default_settings, target_json):
+    """Validates all settings and makes sure they are valid."""
 
     # This function is meant for checking that the settings.json file is valid,
     # to not cause issues later down the line.
@@ -24,28 +27,29 @@ def settings_validator(settings_format, settings, default_settings, target_json)
         for key, value in settings_format:
 
             # Prints value.
-            print(f"Setting: {key}")
+            # print(f"Setting: {key}")
 
             # Checks if value is a dictionary. Otherwise, do nothing.
             # Without this, the next loop can try to access a dictionary that doesn't exist and cause an error.
             if isinstance(value, dict):
-                print("Value matches dict")
+                # print("Value matches dict")
 
                 # Checks if the parameter for the corresponding setting in settings.json
                 # isn't a possible value listed in the settings_list constant.
                 # If it isn't, then we modify the settings dictionary.
                 if settings[key] not in value["options"]:
-                    print(f"Value incorrect for {key}, changing to default...")
+                    # print(f"Value incorrect for {key}, changing to default...")
                     settings[key] = value["default_value"]
                     continue
                 else:
-                    print("Settings value is valid")
+                    # print("Settings value is valid")
                     continue
 
             # If value isn't a dictionary (indicating no double dictionary),
             # don't try to access items within the value.
             else:
-                print("This isn't a double dictionary.")
+                # print("This isn't a double dictionary.")
+                break
 
         # Once we are done, recreate the settings.json file with the new settings dictionary.
         settings_recreate(target_json, settings)
@@ -55,7 +59,7 @@ def settings_validator(settings_format, settings, default_settings, target_json)
     # A TypeError will trigger if the file is missing.
     # If either of these happen, the entire settings.json file will be rewritten to default.
     except (KeyError, TypeError):
-        print("JSON file invalid! Recreating file...")
+        # print("JSON file invalid! Recreating file...")
         settings_recreate(target_json, default_settings)
         # Since the file is completely recreated here, we can stop checking if the settings are valid
         # because we know they will be valid. So we return here instead of rerunning everything.
@@ -63,12 +67,14 @@ def settings_validator(settings_format, settings, default_settings, target_json)
 
 
 def settings_recreate(target_json, new_contents):
+    """Recreates settings to set dictionary."""
     with open(target_json, "w") as j:
         j.write(json.dumps(new_contents, indent=4))
-    with open(target_json, "r") as j:
-        print(f"{target_json} contents are now {json.load(j)}")
+    # with open(target_json, "r") as j:
+    #     print(f"{target_json} contents are now {json.load(j)}")
 
 def settings_modify(target_json, target_setting, new_value):
+    """Modifies only a single setting."""
     json_dict = settings_read(target_json)
 
     json_dict[target_setting] = new_value
