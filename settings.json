@@ -1,4 +1,4 @@
 {
-    "style": 1,
-    "help_button_hide": "False"
+    "style": "Default",
+    "help_button_hide": false
 }
