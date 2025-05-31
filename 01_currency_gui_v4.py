@@ -153,7 +153,7 @@ class Converter:
         else:
 
             try:
-                value = int(self.input_entry.get())
+                value = float(self.input_entry.get())
                 if value > 0:
                     # Add API stuff here later
                     self.convert(value)
@@ -416,3 +416,6 @@ root = Tk()
 root.title("Currency Converter")
 Converter()
 root.mainloop()
+
+# Credits:
+# "Line of Flight" - frankfurter.dev API
