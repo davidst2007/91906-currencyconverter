@@ -35,8 +35,8 @@ settings = {
 
 # default_dict is used to recreate the settings.json file if it is invalid or missing.
 default_dict = {
-    "style": 1,
-    "help_button_hide": "False"
+    "style": "Default",
+    "help_button_hide": False
 }
 
 # this is just for minimising having to type out the same thing constantly and should be used as
